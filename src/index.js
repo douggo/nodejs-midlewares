@@ -14,10 +14,9 @@ function getUser(username) {
 }
 
 function checksExistsUserAccount(request, response, next) {
-  const { username } = request.headers,
-        user = getUser(username);
+  const user = getUser(request.headers.username);
   if(!user) {
-    return response.status(404).json({ error: "User not found! "});
+    return response.status(404).json({ error: "User not found!" });
   }
   request.user = user;
   next();
@@ -30,14 +29,14 @@ function checksCreateTodosUserAvailability(request, response, next) {
   if((!isUserPro && todoAmount < 10) || isUserPro) {
     next();
   } else {
-    return response.status(403).json({ error: "User has reached the max amount of to-dos created. Upgrade to Pro to be able to create more!"})
+    return response.status(403).json({ error: "User has reached the max amount of to-dos created. Upgrade to Pro to be able to create more!" })
   }
 }
 
 function checksTodoExists(request, response, next) {
   const { id } = request.params;
   if(!validate(id)) {
-    return response.status(400).json({ error: "ID passed is not valid!"});
+    return response.status(400).json({ error: "ID passed is not valid!" });
   }
   const user = getUser(request.headers.username);
   if(!user) {
@@ -54,7 +53,7 @@ function checksTodoExists(request, response, next) {
 
 function findUserById(request, response, next) {
   const { id } = request.params;
-  if(!validate(id) ){
+  if(!validate(id)){
     return response.status(400).json({ error: "ID passed is not valid!" });
   }
   const user = users.find(user => user.id === id);
